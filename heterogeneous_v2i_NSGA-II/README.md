@@ -1,11 +1,10 @@
-###NSGA-2
+### NSGA-2
 
-####Compile
+#### Compile
 
 `$ g++ nsga2.cpp -o nsga2`
 
-
-####Execution
+#### Execution
 
 `$ ./nsga2 exp τ1 ... τn`
 
