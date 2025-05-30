@@ -10,7 +10,7 @@
 #define MAX_TRACE_SIZE              2200000
 #define MAX_NUMBER_OF_VEHICLES      80000
 // max solution size;
-#define MAX_NUMBER_OF_RSUS          1024
+#define MAX_NUMBER_OF_RSUS          3000
 
 #define MAX_INPUT_FILE_PATH_SIZE    100
 
@@ -87,7 +87,7 @@ void n_deployment(
     trace_line *trace, int trace_size, 
     struct_n_deployment_input n_deployment_input, 
     struct_n_deployment_output* output_n_deployment_output,
-    FILE* coverage_log_file
+    FILE* best_coverage_log_file
 );
 
 void fill_scores_in_cells(
@@ -179,13 +179,13 @@ int main(int argc, char **argv)
     n_deployment_input.cells, n_deployment_input.contacts_time_threshold, n_deployment_input.number_of_contacts);
 
     // ==================== 2 - RUN AND WRITE COVERAGE LOG =========================== //
-    char coverage_log_file_name[MAX_INPUT_FILE_PATH_SIZE + 250];
-    sprintf(coverage_log_file_name, "rsu=%d_tau=%d_rcl=%d_iter=%d_cont=%d_coverage_log.txt", 
+    char best_coverage_log_file_name[MAX_INPUT_FILE_PATH_SIZE + 250];
+    sprintf(best_coverage_log_file_name, "rsu=%d_tau=%d_rcl=%d_iter=%d_cont=%d_best_coverage_log.csv", 
     n_deployment_input.number_of_rsus, n_deployment_input.contacts_time_threshold, 
     n_deployment_input.grasp_rcl_len, n_deployment_input.n_deploy_num_ite, n_deployment_input.number_of_contacts);
 
-    FILE* coverage_log_file = fopen(coverage_log_file_name, "w");
-    if (coverage_log_file == NULL)
+    FILE* best_coverage_log_file = fopen(best_coverage_log_file_name, "w");
+    if (best_coverage_log_file == NULL)
     {
         fprintf(stderr, "N-DEPLOYMENT: OUTPUT FILE ERROR: can't write coverage log file\n");
         free(trace);
@@ -193,9 +193,9 @@ int main(int argc, char **argv)
     }
 
     struct_n_deployment_output n_deployment_output;
-    n_deployment(trace, trace_size, n_deployment_input, &n_deployment_output, coverage_log_file);
+    n_deployment(trace, trace_size, n_deployment_input, &n_deployment_output, best_coverage_log_file);
 
-    fclose(coverage_log_file);
+    fclose(best_coverage_log_file);
     // ==================== 3 - WRITE OTHER RESULTS: SUMMARY AND RSUS ================= //
     status = write_summary_to_file(n_deployment_input, n_deployment_output, error_msg);
     if (status != 0)
@@ -384,7 +384,7 @@ char* output_error_msg)
     return 0;
 }
 
-void n_deployment(trace_line *trace, int trace_size, struct_n_deployment_input n_deployment_input, struct_n_deployment_output* output_n_deployment_output, FILE* coverage_log_file)
+void n_deployment(trace_line *trace, int trace_size, struct_n_deployment_input n_deployment_input, struct_n_deployment_output* output_n_deployment_output, FILE* best_coverage_log_file)
 {
     int coverage_best_solution = 0;
 
@@ -433,14 +433,13 @@ void n_deployment(trace_line *trace, int trace_size, struct_n_deployment_input n
         num_of_contacts, cells, 
         n_deployment_input.contacts_time_threshold, n_deployment_input.number_of_contacts);
 		
-        fprintf(coverage_log_file, "%d", coverage);
-        if (iteration_index != n_deployment_input.n_deploy_num_ite - 1)
-            fprintf(coverage_log_file, ";");
-
         // If current coverage is better, update best solution;
 		if (coverage > coverage_best_solution)
 		{
 			coverage_best_solution = coverage;
+
+            fprintf(best_coverage_log_file, "%d,%d\n", iteration_index, coverage);
+
             int i = 0;
             for (; i < solution_size; i++)
             {
@@ -628,7 +627,7 @@ int write_rsus_to_file(
 )
 {
     char output_file_name[MAX_INPUT_FILE_PATH_SIZE + 250];
-    sprintf(output_file_name, "rsu=%d_tau=%d_rcl=%d_iter=%d_cont=%d_rsus.txt", 
+    sprintf(output_file_name, "rsu=%d_tau=%d_rcl=%d_iter=%d_cont=%d_rsus.csv", 
     n_deployment_input.number_of_rsus, n_deployment_input.contacts_time_threshold, 
     n_deployment_input.grasp_rcl_len, n_deployment_input.n_deploy_num_ite, n_deployment_input.number_of_contacts);
 
@@ -643,9 +642,7 @@ int write_rsus_to_file(
     for (i = 0; i < num_rsus; i++)
     {
         pos_2d pos = rsus_pos[i];
-        fprintf(rsus_file, "%d,%d", pos.x, pos.y);
-        if (i != num_rsus - 1)
-            fprintf(rsus_file, ";");
+        fprintf(rsus_file, "%d,%d\n", pos.x, pos.y);
     }
 
     fclose(rsus_file);

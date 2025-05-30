@@ -31,6 +31,6 @@ Deployment method of putting RSUs mainly on entrance points, so that vehicles re
 
     - execution summary file "_summary.txt" contains execution time, input values and number of vehicles covered;
 
-    - infrastructure file: "_rsus.txt" contains pairs "x,y" separated by ";". If no solution is found, it will contain only (0, 0) cells. If the number of rsus to deploy is too big, the remaining cells will padded with (0, 0). So the trace should not have (0, 0) cells;
+    - infrastructure file: "_rsus.csv" contains pairs "x,y". If no solution is found, it will contain only (0, 0) cells. If the number of rsus to deploy is too big, the remaining cells will padded with (0, 0). So the trace should not have (0, 0) cells;
 
-    - coverage evolution file "_coverage_log.txt" contains the vehicle coverage with each intermediate solution in the search, separated by ";";
+    - coverage evolution file "_coverage_log.csv" contains the vehicle coverage with each intermediate solution in the search, separated by ",";

@@ -20,6 +20,6 @@ Contains a &lt;cells per cluster> file (cluster_cells.csv) used by NSGA-II, and 
 
 	- version 1 (v1): used in subsection E comprising the two scenarios of different distributions of RSUs across clusters as shown in the table;
 
-	- version 2 (v2): used in subsection G, comprising scenarios of different total number of RSUs across the clusters. The difference is this version tries to place all RSUs; if a number of RSUs does not fit in one cluster, the method will try to fit it in another one. This was used in comparison with the NSGA-II, in which the total number of RSUs was the parameter, as figures for each cluster show;
+	- version 2 (v2): used in subsection G, comprising scenarios of different total number of RSUs, divided equally in the clusters. The difference is this version tries to place all RSUs; if a number of RSUs does not fit in one cluster, the method will try to fit it in another one. This was used in comparison with the NSGA-II, so the number of RSUs needed to be specified, as figures for each cluster show;
 
 - **heterogeneous_v2i_NSGA-II/**
