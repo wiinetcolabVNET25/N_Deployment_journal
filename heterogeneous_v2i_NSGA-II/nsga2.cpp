@@ -29,7 +29,7 @@
 #define QBL 20 // quantidade de elementos do baseline
 #define QG 0   // quantidade de elementos do grasp
  
-#define TF "../datasets/5_to_7pm.csv"    // arquivo de entrada
+#define TF "../datasets/6_to_8am.csv"    // arquivo de entrada
 #define CF "../clustering_results/cluster_cells.csv"  // arquivo de clusters
 #define BL "../baseline_solution/baseline.csv" // arquivo de clusters
 
